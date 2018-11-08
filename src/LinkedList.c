@@ -500,27 +500,20 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 LinkedList* ll_subList(LinkedList* this,int from,int to)
 {
     LinkedList* cloneArray = NULL;
-    int auxIndex=from;
+
 
     int i;
 
-    if(from >= 0 && to < ll_len(this) && this != NULL && from < to && from < ll_len(this))
+    if(this != NULL && from >=0 && to>from && to <=ll_len(this))
     {
         cloneArray = ll_newLinkedList();
 
-        for(i=0;i<(to-from);i++)
+        for(i=from;i<=to;i++)
         {
 
-            if (i==0)
-            {
-                cloneArray->pFirstNode=getNode(this,auxIndex);
-            }
-
-            addNode(cloneArray, i,ll_get(this,auxIndex));
-            auxIndex=auxIndex+1;
+            ll_add(cloneArray,ll_get(this,i));
         }
 
-        cloneArray->size= (to-from);
 
     }
 
@@ -539,6 +532,12 @@ LinkedList* ll_clone(LinkedList* this)
 {
     LinkedList* cloneArray = NULL;
 
+    if (this != NULL)
+
+    {
+        cloneArray= ll_subList(this,0,ll_len(this));
+    }
+
     return cloneArray;
 }
 
@@ -553,6 +552,44 @@ LinkedList* ll_clone(LinkedList* this)
 int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
 {
     int returnAux =-1;
+    int j;
+    Node * auxNode=NULL;
+    Node * auxNode1;
+    Node * auxNode2;
+    int flagNoEstaOrdenado = 1;
+
+
+    if (this != NULL && (order == 0 || order == 1) && pFunc != NULL)
+    {
+       /// pFunc();
+
+        while (flagNoEstaOrdenado==1)
+        {
+            flagNoEstaOrdenado = 0;
+            for (j = 1; j < ll_len(this); j++)
+            {
+                auxNode1=getNode(this, j);
+                auxNode2=getNode(this, j-1);
+
+                if (order == 1 && pFunc(auxNode2->pElement,auxNode1->pElement) == -1)
+                {
+                    auxNode->pNextNode = auxNode1->pNextNode;
+                    auxNode1->pNextNode = auxNode2->pNextNode;
+                    auxNode2->pNextNode = auxNode->pNextNode;
+                    flagNoEstaOrdenado = 1;
+                }
+                else if (order == 0 && pFunc(auxNode2->pElement,auxNode1->pElement) == 1)
+                {
+                    auxNode->pNextNode = auxNode1->pNextNode;
+                    auxNode1->pNextNode = auxNode2->pNextNode;
+                    auxNode2->pNextNode = auxNode->pNextNode;
+                    flagNoEstaOrdenado = 1;
+                }
+
+        }
+    returnAux=0;
+    }
+}
 
     return returnAux;
 
