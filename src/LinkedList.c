@@ -556,12 +556,14 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
     Node * auxNode=NULL;
     Node * auxNode1;
     Node * auxNode2;
+    void * auxElement1;
+    void * auxElement2;
     int flagNoEstaOrdenado = 1;
 
 
     if (this != NULL && (order == 0 || order == 1) && pFunc != NULL)
     {
-       /// pFunc();
+
 
         while (flagNoEstaOrdenado==1)
         {
@@ -570,19 +572,24 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
             {
                 auxNode1=getNode(this, j);
                 auxNode2=getNode(this, j-1);
+                auxElement1=ll_get(this,j);
+                auxElement2=ll_get(this,(j-1));
 
-                if (order == 1 && pFunc(auxNode2->pElement,auxNode1->pElement) == -1)
+
+                if (order == 1 && pFunc(auxElement1,auxElement2) == -1)
                 {
-                    auxNode->pNextNode = auxNode1->pNextNode;
-                    auxNode1->pNextNode = auxNode2->pNextNode;
-                    auxNode2->pNextNode = auxNode->pNextNode;
+
+                    auxNode1->pElement = auxElement2;
+                    auxNode2->pElement = auxElement1;
+
                     flagNoEstaOrdenado = 1;
                 }
-                else if (order == 0 && pFunc(auxNode2->pElement,auxNode1->pElement) == 1)
+                else if (order == 0 && pFunc(auxElement1,auxElement2) == 1)
                 {
-                    auxNode->pNextNode = auxNode1->pNextNode;
-                    auxNode1->pNextNode = auxNode2->pNextNode;
-                    auxNode2->pNextNode = auxNode->pNextNode;
+
+                    auxNode1->pElement = auxElement2;
+                    auxNode2->pElement = auxElement1;
+
                     flagNoEstaOrdenado = 1;
                 }
 
